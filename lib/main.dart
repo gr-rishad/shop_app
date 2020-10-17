@@ -3,22 +3,33 @@ import 'package:flutter/material.dart';
 import './screens/product_details_screen.dart';
 import './providers/products.dart';
 import 'package:provider/provider.dart';
+import './providers/cart.dart';
+
+import 'providers/products.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      builder: (ctx) => Products(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          // builder: (ctx) => Products(),
+          value: Products(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+      ],
       child: MaterialApp(
         theme: ThemeData(
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
-            fontFamily: 'Lato'), 
+            fontFamily: 'Lato'),
         home: ProductsOverviewScreen(),
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
         },
       ),
-    ), 
+    ),
   );
 }
 
