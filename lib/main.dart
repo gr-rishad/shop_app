@@ -1,3 +1,5 @@
+import 'package:app_shop/screens/cart_screen.dart';
+
 import './screens/products_overview_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/product_details_screen.dart';
@@ -20,6 +22,7 @@ void main() {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
@@ -27,6 +30,7 @@ void main() {
         home: ProductsOverviewScreen(),
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+          CartScreen.routeName: (ctx) => CartScreen(),
         },
       ),
     ),
