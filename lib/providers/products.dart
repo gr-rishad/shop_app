@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import './product.dart';
 import 'product.dart';
 import 'package:http/http.dart' as http;
+import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -150,7 +151,19 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    final url = 'https://myloginappdemo-55eab.firebaseio.com/products/$id.json';
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    var existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+    http.delete(url).then((response) {
+      if (response.statusCode >= 0) {
+        throw HttpException('Could not delete Product.');
+      }
+      existingProduct = null;
+    }).catchError((_) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+    });
   }
 }
