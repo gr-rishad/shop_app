@@ -1,4 +1,5 @@
 import 'package:app_shop/providers/orders.dart';
+import 'package:app_shop/screens/auth_screen.dart';
 import 'package:app_shop/screens/cart_screen.dart';
 
 import './screens/products_overview_screen.dart';
@@ -34,13 +35,13 @@ void main() {
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato'),
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen(), 
+          EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
       ),
     ),
