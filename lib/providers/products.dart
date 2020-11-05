@@ -66,12 +66,16 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  final String authToken;
+  Products(this.authToken, this._items);
+
   Product findById(String id) {
     return items.firstWhere((prod) => prod.id == id);
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://myloginappdemo-55eab.firebaseio.com/products.json';
+    final url =
+        'https://myloginappdemo-55eab.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       // print(json.decode(response.body));
@@ -101,7 +105,8 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     //  _items.add(value);
-    const url = 'https://myloginappdemo-55eab.firebaseio.com/products.json';
+    final url =
+        'https://myloginappdemo-55eab.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.post(
@@ -138,7 +143,7 @@ class Products with ChangeNotifier {
 
     if (prodIndex >= 0) {
       final url =
-          'https://myloginappdemo-55eab.firebaseio.com/products/$id.json';
+          'https://myloginappdemo-55eab.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -154,7 +159,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = 'https://myloginappdemo-55eab.firebaseio.com/products/$id.json';
+    final url =
+        'https://myloginappdemo-55eab.firebaseio.com/products/$id.jsonauth=$authToken';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);

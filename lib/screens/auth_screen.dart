@@ -110,9 +110,9 @@ class _AuthCardState extends State<AuthCard> {
             ));
   }
 
-  void _submit() async {
-    if (_formKey.currentState.validate()) {
-      // Invalid
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      // Invalid!
       return;
     }
     _formKey.currentState.save();
@@ -121,10 +121,13 @@ class _AuthCardState extends State<AuthCard> {
     });
     try {
       if (_authMode == AuthMode.Login) {
-        await Provider.of<Auth>(context)
-            .login(_authData['email'], _authData['password']);
+        // Log user in
+        await Provider.of<Auth>(context, listen: false).login(
+          _authData['email'],
+          _authData['password'],
+        );
       } else {
-        // Sign up user
+        // Sign user up
         await Provider.of<Auth>(context, listen: false).signUp(
           _authData['email'],
           _authData['password'],
@@ -133,21 +136,23 @@ class _AuthCardState extends State<AuthCard> {
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
-        errorMessage = 'This email address is already in use';
+        errorMessage = 'This email address is already in use.';
       } else if (error.toString().contains('INVALID_EMAIL')) {
         errorMessage = 'This is not a valid email address';
       } else if (error.toString().contains('WEAK_PASSWORD')) {
-        errorMessage = 'This password is too weak';
+        errorMessage = 'This password is too weak.';
       } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-        errorMessage = 'Could not find a user with that email';
+        errorMessage = 'Could not find a user with that email.';
       } else if (error.toString().contains('INVALID_PASSWORD')) {
-        errorMessage = 'Invalid Password.';
+        errorMessage = 'Invalid password.';
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
-      var errorMessage = 'Couldn\"t authenticate you.Please try again later!';
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
     }
+
     setState(() {
       _isLoading = false;
     });
@@ -179,8 +184,8 @@ class _AuthCardState extends State<AuthCard> {
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16),
-        key: _formKey,
         child: Form(
+          key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
