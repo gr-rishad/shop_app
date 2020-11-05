@@ -160,7 +160,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url =
-        'https://myloginappdemo-55eab.firebaseio.com/products/$id.jsonauth=$authToken';
+        'https://myloginappdemo-55eab.firebaseio.com/products/$id.json?auth=$authToken';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
