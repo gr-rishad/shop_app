@@ -1,6 +1,7 @@
 import 'package:app_shop/providers/orders.dart';
 import 'package:app_shop/screens/auth_screen.dart';
 import 'package:app_shop/screens/cart_screen.dart';
+import 'package:app_shop/screens/splash_screen.dart';
 
 import './screens/products_overview_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,16 @@ void main() {
                 primarySwatch: Colors.purple,
                 accentColor: Colors.deepOrange,
                 fontFamily: 'Lato'),
-            home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+            home: auth.isAuth
+                ? ProductsOverviewScreen()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        authResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen(),
+                  ),
             routes: {
               ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
               CartScreen.routeName: (ctx) => CartScreen(),
