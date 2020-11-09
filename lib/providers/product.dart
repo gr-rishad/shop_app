@@ -24,20 +24,21 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus() async {
+  Future<void> toggleFavoriteStatus(String token, String userId) async {
     var oldStatus = isFavorite;
     isFavorite = !isFavorite;
-    print(isFavorite.toString());
-    print('-----------------------------------------------');
+    // print(isFavorite.toString());
+    //print('--------------------------- --------------------');
     notifyListeners();
-    print(isFavorite.toString());
-    final url = 'https://myloginappdemo-55eab.firebaseio.com/products/$id.json';
+    // print(isFavorite.toString());
+    final url =
+        'https://myloginappdemo-55eab.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
     try {
-      final response = await http.patch(
+      final response = await http.put(
         url,
-        body: json.encode({
-          'isFavorite': isFavorite,
-        }),
+        body: json.encode(
+          isFavorite,
+        ),
       );
       if (response.statusCode >= 400) {
         _setFavValue(oldStatus);

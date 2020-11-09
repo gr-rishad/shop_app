@@ -26,13 +26,18 @@ void main() {
             builder: (ctx, auth, previousProducts) => Products(
               auth.token,
               previousProducts == null ? [] : previousProducts.items,
+              auth.userId,
             ),
           ),
           ChangeNotifierProvider.value(
             value: Cart(),
           ),
-          ChangeNotifierProvider.value(
-            value: Orders(),
+          ChangeNotifierProxyProvider<Auth, Orders>(
+            builder: (ctx, auth, previousOrders) => Orders(
+              auth.token,
+              auth.userId,
+              previousOrders == null ? [] : previousOrders.orders,
+            ),
           ),
         ],
         child: Consumer<Auth>(
